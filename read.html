@@ -1,0 +1,7 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>西天</title><link rel="stylesheet" href="style.css"></head>
+<body><div class="bar"><a href="./">← 目錄</a><b id="t"></b><span></span></div><div id="p" class="pages"></div>
+<div class="nav"><a id="pv" class="btn">上一章</a><a href="./" class="btn">目錄</a><a id="nx" class="btn">下一章</a></div>
+<script>const id=new URLSearchParams(location.search).get('v');fetch('manifest.json').then(r=>r.json()).then(m=>{const vs=m.volumes,i=Math.max(0,vs.findIndex(v=>v.id===id)),v=vs[i];
+document.title=`${v.stage} ${v.title}｜西天`;t.textContent=`${v.stage}・${v.title}`;
+p.innerHTML=v.pages.map((f,k)=>`<img loading="${k<3?'eager':'lazy'}" src="${v.dir}/${f}" alt="第${k+1}頁">`).join('');
+[[pv,vs[i-1]],[nx,vs[i+1]]].forEach(([e,o])=>o?e.href='read.html?v='+o.id:e.classList.add('off'))})</script></body></html>

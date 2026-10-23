@@ -1,0 +1,3 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>西天</title><link rel="stylesheet" href="style.css"></head>
+<body><div class="wrap"><h1>西天</h1><div id="list" class="list">載入中…</div></div>
+<script>fetch('manifest.json').then(r=>r.json()).then(m=>{let h='',s='';m.volumes.forEach(v=>{if(v.stage!==s){s=v.stage;h+=`<h2>${s}</h2>`}h+=`<a href="read.html?v=${v.id}">${v.title}<span>${v.pages.length} 頁</span></a>`});list.innerHTML=h})</script></body></html>
