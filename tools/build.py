@@ -10,6 +10,10 @@
   2. 產生手機用小圖 comics/<卷>/s/NNNN.webp（寬 720px，約省一半流量）
   3. 依 manifest 的 cover 設定產生每卷縮圖 comics/<卷>/thumb.webp
   4. 依 manifest 的 hero 設定產生首頁主視覺 assets/hero.webp 與分享預覽圖 og.jpg
+  5. 依每一章的 cover 設定產生章節封面 assets/chapters/<章>.webp
+  6. 在 HTML 引用的 css／js 加上版本號，讀者不會看到舊快取
+
+改了網站程式（style.css、assets/*.js）之後，也請再跑一次，版本號才會更新。
 
 卷名、簡介、更新日期、封面取景等文字資料請直接改 manifest.json，
 這支工具只會更新 pages 欄位與圖片，其他欄位原樣保留。
@@ -96,6 +100,33 @@ def build_hero(hero):
     print("首頁主視覺與分享預覽圖已更新")
 
 
+def build_chapter(ch):
+    cover = ch.get("cover")
+    if not cover:
+        return
+    with Image.open(ROOT / cover["src"]) as im:
+        box = cover.get("box") or [0, 0, im.width, im.height]
+        img = fit_crop(im.convert("RGB"), box, 16 / 9).resize((1280, 720), Image.LANCZOS)
+    save_webp(img, ROOT / "assets" / "chapters" / f"{ch['id']}.webp", 80)
+    print(f"{ch['name']} 封面已更新")
+
+
+def stamp_html():
+    """在 HTML 引用的 css／js 後面加上內容雜湊（?v=xxxx），更新後讀者不會卡在舊快取。"""
+    import hashlib
+
+    def digest(rel):
+        return hashlib.sha1((ROOT / rel).read_bytes()).hexdigest()[:8]
+
+    pattern = re.compile(r'(?P<attr>(?:href|src)=")(?P<path>(?:style\.css|assets/[\w-]+\.js))(?:\?v=[0-9a-f]+)?"')
+    for page in ROOT.glob("*.html"):
+        text = page.read_text(encoding="utf-8")
+        new = pattern.sub(lambda m: f'{m["attr"]}{m["path"]}?v={digest(m["path"])}"', text)
+        if new != text:
+            page.write_text(new, encoding="utf-8")
+    print("HTML 版本號已更新")
+
+
 def dump(data):
     """輸出好讀的 JSON：一般欄位縮排，每一頁、每組座標各佔一行。"""
     text = json.dumps(data, ensure_ascii=False, indent=1)
@@ -114,9 +145,12 @@ def main():
     data = json.loads(MANIFEST.read_text(encoding="utf-8"))
     for vol in data["volumes"]:
         build_volume(vol)
+    for ch in data.get("chapters", []):
+        build_chapter(ch)
     if data.get("hero"):
         build_hero(data["hero"])
     MANIFEST.write_text(dump(data), encoding="utf-8")
+    stamp_html()
     print("manifest.json 已更新")
 
 

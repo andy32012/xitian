@@ -1,6 +1,8 @@
 'use strict';
+// 作品首頁：故事簡介＋各章節
 (() => {
-  const { h, store, loadManifest, pageNo, volName, readUrl } = window.X;
+  const { h, store, loadManifest, pageNo, volName, readUrl, chapterUrl, volsOf, slash, readBar, setupResume } =
+    window.X;
   const list = document.getElementById('list');
 
   loadManifest()
@@ -10,103 +12,79 @@
     });
 
   function render(m) {
-    const vols = m.volumes;
-    const last = store.get('last', null);
-    const progress = store.get('progress', {});
-
-    // 繼續閱讀
-    const lastVol = last && vols.find((v) => v.id === last.v);
-    if (lastVol) {
-      const resume = document.getElementById('resume');
-      resume.href = readUrl(lastVol, last.p);
-      resume.textContent = `繼續閱讀・${lastVol.title} 第 ${last.p} 頁`;
-      resume.hidden = false;
-      document.getElementById('start').classList.remove('primary');
-    }
+    setupResume(m);
 
     // 最近更新
-    const newest = vols
+    const newest = m.volumes
       .filter((v) => v.updated)
       .sort((a, b) => (a.updated < b.updated ? 1 : -1))[0];
     if (newest) {
       const news = document.getElementById('news');
       news.replaceChildren(
         h('span', { class: 'dot', 'aria-hidden': 'true' }),
-        `最近更新 ${newest.updated.replaceAll('-', '/')}　`,
+        `最近更新 ${slash(newest.updated)}　`,
         h('a', { href: readUrl(newest), text: `${newest.stage}・${volName(newest)}` })
       );
       news.hidden = false;
     }
 
-    // 卷列表，依章分組
-    const groups = [];
-    for (const v of vols) {
-      let g = groups.find((x) => x.stage === v.stage);
-      if (!g) groups.push((g = { stage: v.stage, vols: [] }));
-      g.vols.push(v);
+    // 故事簡介
+    const work = m.work;
+    if (work) {
+      document.getElementById('story').replaceChildren(
+        h('h2', {}, '故事', h('small', { text: `《${work.name}》` })),
+        h('div', { class: 'genres' }, (work.genres || []).map((g) => h('span', { text: g }))),
+        h('div', { class: 'intro' }, (work.intro || []).map((t) => h('p', { text: t })))
+      );
     }
-    const stageTitles = m.stages || {};
 
-    list.replaceChildren(
-      ...groups.map((g) =>
+    // 章節
+    const progress = store.get('progress', {});
+    const cards = (m.chapters || []).map((c) => {
+      const vols = volsOf(m, c);
+      const total = vols.reduce((s, v) => s + v.pages.length, 0);
+      const first = vols.length ? pageNo(vols[0].pages[0]) : 0;
+      const readTo = Math.max(0, ...vols.map((v) => progress[v.id] || 0));
+      const done = readTo && total ? Math.min(1, (readTo - first + 1) / total) : 0;
+      return h(
+        'a',
+        { class: 'chap', href: chapterUrl(c) },
         h(
-          'section',
-          { class: 'stage' },
-          h(
-            'h2',
-            {},
-            g.stage,
-            stageTitles[g.stage] ? h('small', { text: stageTitles[g.stage] }) : null
-          ),
-          g.vols.map((v) => card(v, progress[v.id]))
-        )
-      ),
-      h('p', { class: 'soon', text: '敬請期待' })
-    );
-  }
-
-  function card(v, readTo) {
-    const first = pageNo(v.pages[0]);
-    const lastNo = pageNo(v.pages[v.pages.length - 1]);
-    const done = readTo ? Math.min(1, (readTo - first + 1) / v.pages.length) : 0;
-
-    return h(
-      'a',
-      { class: 'vol', href: readUrl(v, readTo && readTo < lastNo ? readTo : null) },
-      h('img', {
-        class: 'thumb',
-        src: v.dir + '/thumb.webp',
-        alt: '',
-        width: 640,
-        height: 360,
-        loading: 'lazy',
-        decoding: 'async',
-      }),
-      h(
-        'div',
-        { class: 'vol-body' },
-        h('h3', {}, v.title, v.subtitle ? h('span', { text: v.subtitle }) : null),
-        v.blurb ? h('p', { class: 'blurb', text: v.blurb }) : null,
-        h(
-          'p',
-          { class: 'meta' },
-          `第 ${first}～${lastNo} 頁・共 ${v.pages.length} 頁`,
-          v.updated ? `・${v.updated.replaceAll('-', '/')} 更新` : null
+          'div',
+          { class: 'chap-cover' },
+          h('img', {
+            src: `assets/chapters/${c.id}.webp`, alt: '', width: 1280, height: 720,
+            decoding: 'async',
+          }),
+          c.status ? h('span', { class: 'badge', text: c.status }) : null
         ),
-        done ? readBar(done, readTo) : null
-      )
-    );
-  }
-
-  function readBar(done, readTo) {
-    const fill = h('i');
-    // 用 CSSOM 設寬度：CSP 不允許 HTML 內嵌 style 屬性，但允許程式設定
-    fill.style.width = Math.round(done * 100) + '%';
-    return h(
-      'div',
-      { class: 'readbar' },
-      h('b', {}, fill),
-      h('span', { text: done >= 1 ? '已讀完' : `讀到第 ${readTo} 頁` })
-    );
+        h(
+          'div',
+          { class: 'chap-body' },
+          h('p', { class: 'chap-no', text: c.name }),
+          h('h3', { text: c.title }),
+          c.tagline ? h('p', { class: 'blurb', text: c.tagline }) : null,
+          h('p', { class: 'meta', text: `${vols.length} 卷・${total} 頁` }),
+          done ? readBar(done, readTo) : null,
+          h('span', { class: 'chap-go', text: '進入這一章 ›' })
+        )
+      );
+    });
+    if (m.upcoming) {
+      cards.push(
+        h(
+          'div',
+          { class: 'chap upcoming', 'aria-label': `${m.upcoming}，敬請期待` },
+          h('div', { class: 'chap-cover blank' }, h('span', { text: '燈未點' })),
+          h(
+            'div',
+            { class: 'chap-body' },
+            h('p', { class: 'chap-no', text: m.upcoming }),
+            h('h3', { text: '敬請期待' })
+          )
+        )
+      );
+    }
+    list.replaceChildren(h('h2', { class: 'sec' }, '章節'), h('div', { class: 'chaps' }, cards));
   }
 })();

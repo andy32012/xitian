@@ -401,3 +401,54 @@ a.vol:hover { border-color: #e0a84a99; background: var(--surface-2); transform: 
   .turn { display: none; }
 }
 .end .btn, .endcard .btn { flex: none; min-width: 160px; }
+
+/* ── 故事簡介、章節卡、章節頁 ─────────────────── */
+h2.sec, .story h2 {
+  display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap;
+  margin: 0 0 18px; padding-bottom: 10px; border-bottom: 1px solid var(--line);
+  font-size: 1.4rem; letter-spacing: .15em;
+}
+.story h2 small { color: var(--muted); font-size: 1rem; font-weight: 400; letter-spacing: .08em; }
+.story { margin-bottom: 44px; }
+.story:empty { display: none; }
+.genres { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+.genres span {
+  padding: 2px 14px; border: 1px solid #e0a84a66; border-radius: 999px;
+  color: var(--gold); font-size: .85rem; letter-spacing: .2em; text-indent: .2em;
+}
+.intro p { margin: 0 0 1em; font-size: 1.08rem; line-height: 2; color: #e4dac8; letter-spacing: .04em; }
+.intro p:last-child { margin-bottom: 0; color: var(--gold); }
+
+.chaps { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 380px), 1fr)); gap: 18px; }
+.chap {
+  display: flex; flex-direction: column; overflow: hidden;
+  border: 1px solid var(--line); border-radius: 18px; background: var(--surface);
+  transition: border-color .25s, transform .25s, box-shadow .25s;
+}
+a.chap:hover { border-color: #e0a84a99; transform: translateY(-3px); box-shadow: 0 16px 36px #0009; }
+.chap-cover { position: relative; aspect-ratio: 16 / 9; overflow: hidden; background: var(--surface-2); }
+.chap-cover img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .6s ease; }
+a.chap:hover .chap-cover img { transform: scale(1.04); }
+.chap-cover::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, var(--surface) 0%, #0000 45%); }
+.badge {
+  position: absolute; top: 12px; left: 12px; z-index: 1;
+  padding: 2px 12px; border-radius: 999px; background: var(--red); color: #fff3e6;
+  font-size: .8rem; letter-spacing: .15em; box-shadow: 0 4px 12px #0007;
+}
+.chap-body { display: flex; flex-direction: column; gap: 4px; padding: 4px 20px 20px; margin-top: -22px; position: relative; z-index: 1; }
+.chap-no { margin: 0; color: var(--gold); letter-spacing: .3em; font-size: .9rem; }
+.chap h3 { margin: 0 0 4px; font-size: 1.55rem; letter-spacing: .12em; }
+.chap .blurb { margin-bottom: 4px; }
+.chap-go { margin-top: 8px; color: var(--gold); font-size: .9rem; letter-spacing: .1em; }
+.chap.upcoming { opacity: .55; border-style: dashed; }
+.chap-cover.blank { display: grid; place-items: center; background: repeating-linear-gradient(135deg, #1b1713, #1b1713 12px, #201b16 12px, #201b16 24px); }
+.chap-cover.blank span { color: var(--muted); letter-spacing: .6em; text-indent: .6em; font-size: 1.1rem; }
+.chap-cover.blank::after { display: none; }
+.upcoming .chap-body { margin-top: 0; padding-top: 16px; }
+
+.topnav { position: absolute; top: 0; left: 0; right: 0; z-index: 5; padding: 14px 18px; }
+.topnav a { display: inline-block; padding: 6px 14px; border-radius: 999px; background: #0008; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); font-size: .92rem; letter-spacing: .1em; }
+.topnav a:hover { background: #000b; color: var(--gold); }
+.chapter-page .hero { min-height: min(72vh, 640px); }
+.hero .ctitle { font-size: clamp(2.4rem, 9vw, 4.6rem); letter-spacing: .18em; text-indent: .18em; }
+.chapter-page .story { margin-top: 8px; }
