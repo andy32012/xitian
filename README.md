@@ -6,16 +6,21 @@
 
 | 檔案 | 用途 |
 |---|---|
-| `index.html` | 首頁：主視覺、繼續閱讀、最近更新、卷列表 |
+| `index.html` | 作品首頁：主視覺、繼續閱讀、最近更新、故事簡介、章節卡 |
+| `chapter.html` | 章節頁：章名、這一章的故事簡介、卷列表 |
 | `read.html` | 閱讀頁：進入時先問「翻書」或「往下滑」（附動畫示範，可記住選擇、右上角隨時切換）；頁碼與跳頁、進度條、記住閱讀位置 |
 | `style.css` | 全站樣式（深色主題） |
 | `assets/common.js` `home.js` `read.js` | 網站程式 |
 | `assets/ga.js` | Google Analytics 設定 |
-| `manifest.json` | 卷的資料：卷名、簡介、更新日期、封面取景、頁面清單 |
+| `manifest.json` | 作品簡介（`work`）、章節（`chapters`，章名與簡介）、下一章預告（`upcoming`）、各卷資料 |
 | `comics/<卷>/NNNN.webp` | 漫畫原圖，檔名就是全書頁碼（第二卷是 0101～0200） |
 | `comics/<卷>/s/` | 手機用小圖（自動產生） |
 | `comics/<卷>/thumb.webp` `assets/hero.webp` `og.jpg` | 卷縮圖、首頁主視覺、分享預覽圖（自動產生） |
 | `tools/build.py` | 產生上面那些自動檔案、更新頁面清單 |
+
+## 新增一章
+
+在 `manifest.json` 的 `chapters` 加一筆（`id`、`name`、`title`、`status`、`tagline`、`intro`、`cover`），把 `upcoming` 改成再下一章，該章各卷的 `stage` 填同一個 `name`，再跑 `python3 tools/build.py`。
 
 ## 新增一卷
 
@@ -39,6 +44,8 @@
    `cover.box` 是縮圖要取的範圍（左、上、右、下，單位是像素），避開旁白框比較好看。
 3. 執行 `python3 tools/build.py`（需要 `pip install pillow`），它會填好 `pages`、產生小圖和縮圖。
 4. commit、push，GitHub Pages 幾分鐘後更新。
+
+只改了網站程式（`style.css`、`assets/*.js`）也請跑一次 `build.py`，它會更新網址後面的版本號，讀者才不會卡在舊版。
 
 ## 安全設計
 

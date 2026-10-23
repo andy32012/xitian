@@ -1,6 +1,6 @@
 'use strict';
 (() => {
-  const { h, store, loadManifest, pageNo, volName } = window.X;
+  const { h, store, loadManifest, pageNo, volName, chapterOf, chapterUrl } = window.X;
   const $ = (id) => document.getElementById(id);
   const params = new URLSearchParams(location.search);
   const MODES = { flip: '翻書', scroll: '捲動' };
@@ -28,6 +28,9 @@
     let current = nums[0];
 
     document.title = `${v.stage} ${volName(v)}｜${m.title}`;
+    const chapter = chapterOf(m, v);
+    const backHref = chapter ? chapterUrl(chapter) : './';
+    $('back').href = backHref;
     $('t').textContent = `${v.stage}・${volName(v)}`;
 
     const url = (vol, p, md) =>
@@ -69,7 +72,7 @@
     const endPanel = () => [
       h('p', { class: 'end-title', text: `${volName(v)}　完` }),
       volNav('bottom'),
-      h('a', { class: 'btn', href: './', text: '回目錄' }),
+      h('a', { class: 'btn', href: backHref, text: chapter ? `回${chapter.name}` : '回目錄' }),
     ];
 
     // ── 共用：頁碼、進度、存檔 ───────────────────
