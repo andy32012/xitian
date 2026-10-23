@@ -241,7 +241,8 @@
 
       document.body.append(overlay);
       document.body.classList.add('modal-open');
-      requestAnimationFrame(() => overlay.classList.add('in'));
+      void overlay.offsetWidth; // 先排版一次，接著加上 in 才會播放進場動畫
+      overlay.classList.add('in');
       setTimeout(() => dialog.querySelector('.choice').focus({ preventScroll: true }), 60);
 
       function close(after) {
