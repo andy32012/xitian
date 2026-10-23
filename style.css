@@ -411,11 +411,6 @@ h2.sec, .story h2 {
 .story h2 small { color: var(--muted); font-size: 1rem; font-weight: 400; letter-spacing: .08em; }
 .story { margin-bottom: 44px; }
 .story:empty { display: none; }
-.genres { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
-.genres span {
-  padding: 2px 14px; border: 1px solid #e0a84a66; border-radius: 999px;
-  color: var(--gold); font-size: .85rem; letter-spacing: .2em; text-indent: .2em;
-}
 .intro p { margin: 0 0 1em; font-size: 1.08rem; line-height: 2; color: #e4dac8; letter-spacing: .04em; }
 .intro p:last-child { margin-bottom: 0; color: var(--gold); }
 

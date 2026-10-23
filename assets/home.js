@@ -33,7 +33,6 @@
     if (work) {
       document.getElementById('story').replaceChildren(
         h('h2', {}, '故事', h('small', { text: `《${work.name}》` })),
-        h('div', { class: 'genres' }, (work.genres || []).map((g) => h('span', { text: g }))),
         h('div', { class: 'intro' }, (work.intro || []).map((t) => h('p', { text: t })))
       );
     }
