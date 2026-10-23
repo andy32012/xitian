@@ -1,7 +1,43 @@
-<!doctype html><html lang="zh-Hant"><head><script async src="https://www.googletagmanager.com/gtag/js?id=G-TMHF5KP33K"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-TMHF5KP33K');</script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>西天</title><link rel="stylesheet" href="style.css"></head>
-<body><div class="bar"><a href="./">← 目錄</a><b id="t"></b><span></span></div><div id="p" class="pages"></div>
-<div class="nav"><a id="pv" class="btn">上一章</a><a href="./" class="btn">目錄</a><a id="nx" class="btn">下一章</a></div>
-<script>const id=new URLSearchParams(location.search).get('v');fetch('manifest.json').then(r=>r.json()).then(m=>{const vs=m.volumes,i=Math.max(0,vs.findIndex(v=>v.id===id)),v=vs[i];
-document.title=`${v.stage} ${v.title}｜西天`;t.textContent=`${v.stage}・${v.title}`;
-p.innerHTML=v.pages.map((f,k)=>`<img loading="${k<3?'eager':'lazy'}" src="${v.dir}/${f}" alt="第${k+1}頁">`).join('');
-[[pv,vs[i-1]],[nx,vs[i+1]]].forEach(([e,o])=>o?e.href='read.html?v='+o.id:e.classList.add('off'))})</script></body></html>
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://www.googletagmanager.com https://*.google-analytics.com; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com; object-src 'none'; base-uri 'self'; form-action 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>閱讀｜西天</title>
+<meta name="description" content="望川鎮的人上山還願，就再也沒有回來。古風懸疑漫畫《西天》線上閱讀。">
+<meta name="theme-color" content="#110e0b">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="西天">
+<meta property="og:title" content="西天｜線上漫畫">
+<meta property="og:description" content="望川鎮的人上山還願，就再也沒有回來。第一章〈望川鎮的失蹤者〉連載中。">
+<meta property="og:image" content="https://xitian.page/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="zh_TW">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&display=swap">
+<link rel="stylesheet" href="style.css">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-TMHF5KP33K"></script>
+<script src="assets/ga.js"></script>
+<script defer src="assets/common.js"></script>
+<script defer src="assets/read.js"></script>
+</head>
+<body class="reader">
+<header class="bar">
+  <a class="ic" href="./" aria-label="回目錄">←</a>
+  <b id="t" class="ttl">載入中</b>
+  <label class="pg"><span class="sr">跳到第幾頁</span><select id="jump"></select><span id="total"></span></label>
+  <button id="fit" class="ic txt" type="button">放大</button>
+  <div class="prog" aria-hidden="true"><i id="bar"></i></div>
+</header>
+<main id="p" class="pages"></main>
+<footer id="end" class="end"></footer>
+<div id="toast" class="toast" role="status" hidden></div>
+</body>
+</html>
