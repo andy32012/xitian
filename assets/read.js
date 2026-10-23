@@ -179,7 +179,7 @@
       const remember = h('input', { type: 'checkbox', id: 'remember' });
       if (store.get('mode', null)) remember.checked = true;
 
-      const option = (md, title, desc, demo) =>
+      const option = (md, title, demo) =>
         h(
           'button',
           {
@@ -189,7 +189,7 @@
             onclick: () => pick(md),
           },
           h('div', { class: 'demo demo-' + md, 'aria-hidden': 'true' }, demo),
-          h('div', { class: 'choice-text' }, h('b', { text: title }), h('span', { text: desc }))
+          h('div', { class: 'choice-text' }, h('b', { text: title }))
         );
 
       const flipDemo = h(
@@ -219,8 +219,8 @@
         h(
           'div',
           { class: 'choices' },
-          option('flip', '翻書', '一頁一頁翻，像拿著一本書。點右側、向左滑，或按方向鍵。', flipDemo),
-          option('scroll', '往下滑', '整卷連在一起，一路往下讀，最順手。', scrollDemo)
+          option('flip', '翻書', flipDemo),
+          option('scroll', '往下滑', scrollDemo)
         ),
         h(
           'label',
