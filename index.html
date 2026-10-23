@@ -24,8 +24,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&display=swap">
-<link rel="stylesheet" href="style.css?v=9a6f5833">
-<link rel="preload" as="image" href="assets/hero.webp" fetchpriority="high">
+<link rel="stylesheet" href="style.css?v=a752079e">
+<link rel="preload" as="image" href="assets/hero.webp" media="(min-aspect-ratio: 4/5)" fetchpriority="high">
+<link rel="preload" as="image" href="assets/hero-tall.webp" media="(max-aspect-ratio: 4/5)" fetchpriority="high">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-TMHF5KP33K"></script>
 <script src="assets/ga.js?v=8032aa4e"></script>
 <script defer src="assets/common.js?v=dee1beb4"></script>
@@ -33,7 +34,10 @@
 </head>
 <body class="home">
 <header class="hero">
-  <img class="hero-bg" src="assets/hero.webp" alt="" width="1600" height="762" fetchpriority="high">
+  <picture>
+    <source media="(max-aspect-ratio: 4/5)" srcset="assets/hero-tall.webp" width="900" height="1599">
+    <img class="hero-bg home-bg" src="assets/hero.webp" alt="" width="1916" height="821" fetchpriority="high">
+  </picture>
   <div class="hero-in">
     <p class="kicker">西天劫・萬佛墮天</p>
     <h1>西天</h1>

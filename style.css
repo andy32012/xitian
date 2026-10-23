@@ -452,3 +452,7 @@ a.chap:hover .chap-cover img { transform: scale(1.04); }
 .chapter-page .hero { min-height: min(72vh, 640px); }
 .hero .ctitle { font-size: clamp(2.4rem, 9vw, 4.6rem); letter-spacing: .18em; text-indent: .18em; }
 .chapter-page .story { margin-top: 8px; }
+
+/* 首頁主視覺：兩尊如來，佛像在畫面上半，標題壓在下方雲海 */
+.home-bg { object-position: 50% 22%; }
+@media (max-aspect-ratio: 4/5) { .home-bg { object-position: 50% 30%; } }

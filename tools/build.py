@@ -87,15 +87,26 @@ def build_volume(vol):
     print(f"{vol['id']}：{len(pages)} 頁（{pages[0]['f']}～{pages[-1]['f']}）")
 
 
+def resize_to_width(img, width):
+    if img.width <= width:
+        return img
+    return img.resize((width, round(img.height * width / img.width)), Image.LANCZOS)
+
+
 def build_hero(hero):
+    """首頁主視覺：src 是電腦版（橫式），tall 是手機版（直式，可省略）。"""
     with Image.open(ROOT / hero["src"]) as im:
         rgb = im.convert("RGB")
-        box = hero.get("box") or [0, 0, im.width, im.height]
-    wide = fit_crop(rgb, box, 2.1)
-    wide = wide.resize((1600, round(1600 / 2.1)), Image.LANCZOS)
-    save_webp(wide, ROOT / "assets" / "hero.webp", 80)
+    box = hero.get("box") or [0, 0, rgb.width, rgb.height]
+    wide = rgb.crop(box)
+    save_webp(resize_to_width(wide, 1920), ROOT / "assets" / "hero.webp", 82)
 
-    og = fit_crop(rgb, box, 1200 / 630).resize((1200, 630), Image.LANCZOS)
+    if hero.get("tall"):
+        with Image.open(ROOT / hero["tall"]) as im:
+            tall = im.convert("RGB")
+        save_webp(resize_to_width(tall, 900), ROOT / "assets" / "hero-tall.webp", 80)
+
+    og = fit_crop(wide, [0, 0, wide.width, wide.height], 1200 / 630).resize((1200, 630), Image.LANCZOS)
     og.save(ROOT / "og.jpg", "JPEG", quality=84, optimize=True, progressive=True)
     print("首頁主視覺與分享預覽圖已更新")
 

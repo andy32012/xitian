@@ -1,7 +1,7 @@
 {
  "title": "西天",
  "tagline": "望川鎮的人上山還願，就再也沒有回來。",
- "hero": {"src": "comics/v1-1/0090.webp", "box": [0, 100, 1400, 756]},
+ "hero": {"src": "assets/src/home-wide.webp", "tall": "assets/src/home-tall.webp"},
  "work": {
   "name": "西天劫：萬佛墮天",
   "genres": [
