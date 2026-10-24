@@ -96,19 +96,23 @@ window.X = (() => {
   }
 
   // 「繼續閱讀」按鈕：只在讀者讀過（且屬於指定章節，若有指定）時顯示
+  let resumeArgs = null;
   function setupResume(m, onlyChapter) {
+    resumeArgs = [m, onlyChapter];
     const last = store.get('last', null);
     const v = last && m.volumes.find((x) => x.id === last.v);
     if (!v || (onlyChapter && v.stage !== onlyChapter.name)) return;
     const resume = document.getElementById('resume');
     resume.href = readUrl(v, last.p);
-    resume.textContent = `繼續閱讀・${v.title} 第 ${last.p} 頁`;
+    resume.textContent = `繼續閱讀：${v.title} 第 ${last.p} 頁`;
     resume.hidden = false;
     document.getElementById('start').classList.remove('primary');
   }
+  // 登入後若改用雲端進度，重新顯示「繼續閱讀」
+  const refreshResume = () => resumeArgs && setupResume(...resumeArgs);
 
   return {
     h, store, loadManifest, pageNo, volName, readUrl,
-    chapterOf, chapterUrl, volsOf, slash, readBar, volCard, setupResume,
+    chapterOf, chapterUrl, volsOf, slash, readBar, volCard, setupResume, refreshResume,
   };
 })();

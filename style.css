@@ -451,3 +451,18 @@ a.chap:hover .chap-cover img { transform: scale(1.04); }
 /* 首頁主視覺：兩尊如來，佛像在畫面上半，標題壓在下方雲海 */
 .home-bg { object-position: 50% 22%; }
 @media (max-aspect-ratio: 4/5) { .home-bg { object-position: 50% 30%; } }
+
+/* ── Google 登入 ─────────────────────────── */
+.authbox { display: flex; align-items: center; gap: 8px; }
+body:not(.reader) .authbox { position: absolute; top: 14px; right: 18px; z-index: 6; }
+.reader .authbox { margin-left: auto; }
+.auth-btn {
+  padding: 6px 14px; border: 0; border-radius: 999px; cursor: pointer;
+  background: #0008; color: inherit; font: inherit; font-size: .88rem; letter-spacing: .08em;
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+}
+.auth-btn:hover { background: #000b; color: var(--gold); }
+.reader .auth-btn { background: transparent; padding: 6px 8px; white-space: nowrap; }
+.auth-avatar { width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--line); }
+.auth-name { font-size: .85rem; max-width: 7em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+@media (max-width: 520px) { .reader .auth-name { display: none; } }

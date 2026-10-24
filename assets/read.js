@@ -90,7 +90,9 @@
       saveTimer = setTimeout(save, 400);
     }
     function save() {
-      store.set('last', { v: v.id, p: current });
+      store.set('last', { v: v.id, p: current, t: Date.now() });
+      // 交給 auth.js：登入時同步到雲端
+      dispatchEvent(new CustomEvent('xitian:progress', { detail: { v: v.id, p: current } }));
       const progress = store.get('progress', {});
       progress[v.id] = Math.max(progress[v.id] || 0, current);
       store.set('progress', progress);
